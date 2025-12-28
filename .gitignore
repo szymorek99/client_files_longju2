@@ -1,0 +1,19 @@
+# ===== Build artifacts (Metin2 client) =====
+**/Distribute/
+**/Release/
+
+# (opcjonalnie) pliki binarne
+*.exe
+*.dll
+*.pdb
+*.ilk
+*.lib
+
+# Visual Studio
+.vs/
+*.vcxproj.user
+*.suo
+*.user
+
+# Cache
+*.log
