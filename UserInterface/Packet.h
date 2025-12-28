@@ -147,6 +147,9 @@ enum
 	HEADER_CG_SCRIPT_SELECT_ITEM				= 114,
 	HEADER_CG_LOGIN4							= 115,
 	HEADER_CG_LOGIN5_OPENID						= 116,
+#ifdef DROP_WIKI
+	HEADER_CG_DROP_ITEM							= 170,
+#endif
 
 	HEADER_CG_RUNUP_MATRIX_ANSWER               = 201,
 	HEADER_CG_NEWCIBN_PASSPOD_ANSWER			= 202,
@@ -331,6 +334,9 @@ enum
 	//HYBRID CRYPT
 
 	HEADER_GC_AUTH_SUCCESS_OPENID				= 154,
+#ifdef DROP_WIKI
+	HEADER_GC_TARGET_DROP						= 160,
+#endif
 
 	HEADER_GC_RUNUP_MATRIX_QUIZ                 = 201,
 	HEADER_GC_NEWCIBN_PASSPOD_REQUEST			= 202,
@@ -1935,6 +1941,19 @@ typedef struct packet_target
     DWORD       dwVID;
     BYTE        bHPPercent;
 } TPacketGCTarget;
+
+#ifdef DROP_WIKI
+typedef struct SPacketCGDropItem {
+	BYTE	bHeader;
+} TPacketCGDropItem;
+
+typedef struct packet_target_drop {
+	BYTE	header;
+	WORD	raceVnum;
+	WORD	size;
+	DWORD	items[ITEM_DROP_SIZE];
+} TPacketGCTargetDrop;
+#endif
 
 typedef struct packet_damage_info
 {

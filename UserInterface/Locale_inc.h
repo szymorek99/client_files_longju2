@@ -29,4 +29,8 @@
 #define ENABLE_MOUSEWHEEL_EVENT
 #define ENABLE_HIGHLIGHT_NEW_ITEM
 #define ENABLE_EMOJI_SYSTEM
+#define DROP_WIKI
+#ifdef DROP_WIKI
+#define ITEM_DROP_SIZE 70
+#endif
 // GameCore.top
