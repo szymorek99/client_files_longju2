@@ -78,6 +78,17 @@ PyObject * nonplayerGetMonsterName(PyObject * poSelf, PyObject * poArgs)
 	return Py_BuildValue("s", rkNonPlayer.GetMonsterName(iVNum));
 }
 
+PyObject* nonplayerGetRaceFlagNameByVID(PyObject* poSelf, PyObject* poArgs)
+{
+	int vid;
+	if (!PyTuple_GetInteger(poArgs, 0, &vid))
+		return Py_BuildException();
+
+	const char* name = CPythonNonPlayer::Instance().GetRaceFlagNameByVID(vid);
+	return Py_BuildValue("s", name);
+}
+
+
 PyObject * nonplayerLoadNonPlayerData(PyObject * poSelf, PyObject * poArgs)
 {
 	char * szFileName;
@@ -137,6 +148,7 @@ void initNonPlayer()
 		{ "GetLevelByVID",				nonplayerGetLevelByVID,				METH_VARARGS },
 		{ "GetGradeByVID",				nonplayerGetGradeByVID,				METH_VARARGS },
 		{ "GetMonsterName",				nonplayerGetMonsterName,			METH_VARARGS },
+		{ "GetRaceFlagNameByVID",		nonplayerGetRaceFlagNameByVID,		METH_VARARGS },
 
 		{ "LoadNonPlayerData",			nonplayerLoadNonPlayerData,			METH_VARARGS },
 #ifdef DROP_WIKI

@@ -5,6 +5,14 @@
 #include "InstanceBase.h"
 #include "PythonCharacterManager.h"
 
+#define RACE_FLAG_ANIMAL  (1 << 0)
+#define RACE_FLAG_UNDEAD  (1 << 1)
+#define RACE_FLAG_DEVIL   (1 << 2)
+#define RACE_FLAG_HUMAN   (1 << 3)
+#define RACE_FLAG_ORC     (1 << 4)
+#define RACE_FLAG_MYSTIC  (1 << 5)
+
+
 bool CPythonNonPlayer::LoadNonPlayerData(const char * c_szFileName)
 {
 	static DWORD s_adwMobProtoKey[4] =
@@ -175,6 +183,49 @@ const char*	CPythonNonPlayer::GetMonsterName(DWORD dwVnum)
 
 	return c_pTable->szLocaleName;
 }
+
+const char* CPythonNonPlayer::GetRaceFlagNameByVID(DWORD dwVID)
+{
+	static std::string result;
+	result.clear();
+
+	CInstanceBase* pInstance = CPythonCharacterManager::Instance().GetInstancePtr(dwVID);
+	if (!pInstance)
+		return "";
+
+	DWORD dwVnum = pInstance->GetVirtualNumber();
+	const TMobTable* pTable = GetTable(dwVnum);
+	if (!pTable)
+		return "";
+
+	DWORD dwRaceFlag = pTable->dwRaceFlag;
+
+	std::vector<std::string> names;
+
+	if (dwRaceFlag & RACE_FLAG_ANIMAL)
+		names.push_back("Zwierzêta");
+	if (dwRaceFlag & RACE_FLAG_UNDEAD)
+		names.push_back("Nieumar³e");
+	if (dwRaceFlag & RACE_FLAG_DEVIL)
+		names.push_back("Diab³y");
+	if (dwRaceFlag & RACE_FLAG_HUMAN)
+		names.push_back("Ludzie");
+	if (dwRaceFlag & RACE_FLAG_ORC)
+		names.push_back("Orki");
+	if (dwRaceFlag & RACE_FLAG_MYSTIC)
+		names.push_back("Mistyki");
+
+	for (size_t i = 0; i < names.size(); ++i)
+	{
+		if (i > 0)
+			result += ", ";
+		result += names[i];
+	}
+
+	return result.c_str();
+}
+
+
 
 DWORD CPythonNonPlayer::GetMonsterColor(DWORD dwVnum)
 {

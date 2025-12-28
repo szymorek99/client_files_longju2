@@ -578,6 +578,7 @@ class CPythonNonPlayer : public CSingleton<CPythonNonPlayer>
 		BYTE				GetEventTypeByVID(DWORD dwVID);
 		DWORD				GetMonsterColor(DWORD dwVnum);
 		const char*			GetMonsterName(DWORD dwVnum);
+		const char*			GetRaceFlagNameByVID(DWORD dwVID);
 
 #if defined(WJ_SHOW_MOB_INFO) && defined(ENABLE_SHOW_MOBLEVEL)
 		DWORD				GetMonsterLevel(DWORD dwVnum);
