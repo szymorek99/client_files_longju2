@@ -398,6 +398,12 @@ void CPythonNetworkStream::GamePhase()
 				ret = RecvTargetPacket();
 				break;
 
+#ifdef DROP_WIKI
+			case HEADER_GC_TARGET_DROP:
+				ret = RecvDropTargetInfo();
+				break;
+#endif
+
 			case HEADER_GC_DAMAGE_INFO:
 				ret = RecvDamageInfoPacket();
 				break;
@@ -2470,6 +2476,43 @@ bool CPythonNetworkStream::RecvTargetPacket()
 
     return true;
 }
+
+#ifdef DROP_WIKI
+bool CPythonNetworkStream::SendRequestInformationDropItem()
+{
+	TPacketCGDropItem packet;
+	packet.bHeader = HEADER_CG_DROP_ITEM;
+
+	if (!Send(sizeof(packet), &packet))
+	{
+		Tracen("Send Shop Search Packet Error");
+		return false;
+	}
+
+	return SendSequence();
+}
+
+bool CPythonNetworkStream::RecvDropTargetInfo()
+{
+	TPacketGCTargetDrop rInfo;
+	if (!Recv(sizeof(rInfo), &rInfo))
+		return false;
+
+	if (rInfo.size == 0) {
+		PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "BINARY_RecvMobDropEmpty", Py_BuildValue("(i)", rInfo.raceVnum));
+		return true;
+	}
+
+	for (int i = 0; i < rInfo.size; i++)
+	{
+		if (rInfo.items[i])
+			PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "BINARY_RecvAddMobDrop", Py_BuildValue("(ii)", rInfo.raceVnum, rInfo.items[i]));
+	}
+
+	PyCallClassMemberFunc(m_apoPhaseWnd[PHASE_WINDOW_GAME], "BINARY_RecvUpdateMobDrop", Py_BuildValue("()"));
+	return true;
+}
+#endif
 
 bool CPythonNetworkStream::RecvMountPacket()
 {

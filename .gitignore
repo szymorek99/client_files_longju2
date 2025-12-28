@@ -1,6 +1,7 @@
 # ===== Build artifacts (Metin2 client) =====
 **/Distribute/
 **/Release/
+**/Debug/
 
 # (opcjonalnie) pliki binarne
 *.exe

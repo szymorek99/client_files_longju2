@@ -88,6 +88,46 @@ PyObject * nonplayerLoadNonPlayerData(PyObject * poSelf, PyObject * poArgs)
 	return Py_BuildNone();
 }
 
+#ifdef DROP_WIKI
+PyObject* nonplayerGetRaceFlagByVID(PyObject* poSelf, PyObject* poArgs)
+{
+	int iVirtualID;
+	if (!PyTuple_GetInteger(poArgs, 0, &iVirtualID))
+		return Py_BuildException();
+
+	CInstanceBase* pInstance = CPythonCharacterManager::Instance().GetInstancePtr(iVirtualID);
+
+	if (!pInstance)
+		return Py_BuildValue("i", -1);
+
+	const CPythonNonPlayer::TMobTable* pMobTable = CPythonNonPlayer::Instance().GetTable(pInstance->GetVirtualNumber());
+
+	if (!pMobTable)
+		return Py_BuildValue("i", -1);
+
+	return Py_BuildValue("i", pMobTable->dwRaceFlag);
+}
+
+PyObject* nonplayerGetVnumByVID(PyObject* poSelf, PyObject* poArgs)
+{
+	int iVirtualID;
+	if (!PyTuple_GetInteger(poArgs, 0, &iVirtualID))
+		return Py_BuildException();
+
+	CInstanceBase* pInstance = CPythonCharacterManager::Instance().GetInstancePtr(iVirtualID);
+
+	if (!pInstance)
+		return Py_BuildValue("i", -1);
+
+	const CPythonNonPlayer::TMobTable* pMobTable = CPythonNonPlayer::Instance().GetTable(pInstance->GetVirtualNumber());
+
+	if (!pMobTable)
+		return Py_BuildValue("i", -1);
+
+	return Py_BuildValue("i", pMobTable->dwVnum);
+}
+#endif
+
 void initNonPlayer()
 {
 	static PyMethodDef s_methods[] =
@@ -99,6 +139,10 @@ void initNonPlayer()
 		{ "GetMonsterName",				nonplayerGetMonsterName,			METH_VARARGS },
 
 		{ "LoadNonPlayerData",			nonplayerLoadNonPlayerData,			METH_VARARGS },
+#ifdef DROP_WIKI
+		{ "GetRaceFlagByVID",			nonplayerGetRaceFlagByVID,			METH_VARARGS },
+		{ "GetVnumByVID",				nonplayerGetVnumByVID,				METH_VARARGS },
+#endif
 
 		{ NULL,							NULL,								NULL		 },
 	};

@@ -1574,6 +1574,16 @@ PyObject* netSendGuildWithdrawMoneyPacket(PyObject* poSelf, PyObject* poArgs)
 	return Py_BuildNone();
 }
 
+#ifdef DROP_WIKI
+PyObject* netSendRequestInformationDropItem(PyObject* poSelf, PyObject* poArgs)
+{
+	CPythonNetworkStream& rns = CPythonNetworkStream::Instance();
+	rns.SendRequestInformationDropItem();
+
+	return Py_BuildNone();
+}
+#endif
+
 PyObject* netSendRequestRefineInfoPacket(PyObject* poSelf, PyObject* poArgs)
 {
 	int iSlotIndex;
@@ -1875,6 +1885,9 @@ void initnet()
 		{ "SendGuildChargeGSPPacket",				netSendGuildChargeGSPPacket,				METH_VARARGS },
 		{ "SendGuildDepositMoneyPacket",			netSendGuildDepositMoneyPacket,				METH_VARARGS },
 		{ "SendGuildWithdrawMoneyPacket",			netSendGuildWithdrawMoneyPacket,			METH_VARARGS },
+#ifdef DROP_WIKI
+		{ "SendRequestInformationDropItem",			netSendRequestInformationDropItem,			METH_VARARGS },
+#endif
 
 		
 		{ "SendRequestRefineInfoPacket",			netSendRequestRefineInfoPacket,				METH_VARARGS },

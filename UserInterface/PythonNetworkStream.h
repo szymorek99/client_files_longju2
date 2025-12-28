@@ -267,6 +267,11 @@ class CPythonNetworkStream : public CNetworkStream, public CSingleton<CPythonNet
 
 		bool SendDragonSoulRefinePacket(BYTE bRefineType, TItemPos* pos);
 
+#ifdef DROP_WIKI
+		bool SendDeleteShopSearchPacket();
+		bool SendRequestInformationDropItem();
+#endif
+
 		// Handshake
 		bool RecvHandshakePacket();
 		bool RecvHandshakeOKPacket();
@@ -572,6 +577,10 @@ class CPythonNetworkStream : public CNetworkStream, public CSingleton<CPythonNet
 		//Security
 		bool RecvHSCheckRequest();
 		bool RecvXTrapVerifyRequest();
+
+#ifdef DROP_WIKI
+		bool RecvDropTargetInfo();
+#endif
 
 		// @fixme007
 		bool RecvUnk213();
